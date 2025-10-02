@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Mapa Satélite con Leaflet</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <style>
+        #map {
+            height: 100dvh;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="map"></div>
+    <script>
+        const entrada = [-34.4708243, -58.8867402];
+        const mapCenter = [-34.4708243, -58.8867402];
+
+        const map = L.map('map', {
+            center: [-34.471228, -58.891234],
+            zoom: 16,       // zoom inicial
+            minZoom: 15,    // zoom más lejano permitido
+            maxZoom: 18     // zoom más cercano permitido
+        });
+        map.on('zoomend', () => {
+            console.log("Zoom actual:", map.getZoom());
+        });
+
+
+
+        // Capa satélite
+        L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+            attribution: 'Tiles &copy; Esri &mdash; Source: Esri, Maxar, Earthstar Geographics, and others'
+        }).addTo(map);
+
+        // Marcador en la entrada
+        L.marker(entrada).addTo(map).bindPopup("Entrada").openPopup();
+
+        // Polígono alrededor de la entrada
+        const barrioCoords = [
+            [-34.4708, -58.88670],
+            [-34.467824, -58.894317],
+            [-34.469108, -58.896836],
+            [-34.473201, -58.893843],
+            [-34.476859, -58.882340],
+            [-34.476709, -58.882298],
+            [-34.4708, -58.88670]
+
+        ];
+
+        L.polygon(barrioCoords, {
+            color: 'red',
+            weight: 3,
+            fillColor: 'lightblue',
+            fillOpacity: 0.4
+        }).addTo(map).bindPopup("Barrio delimitado");
+    </script>
+</body>
+
+</html>
